@@ -97,7 +97,7 @@ The **Employee Leave Management System** is a **full-stack web application** des
 ### Local Development Setup
 
 #### 1. **Clone the Repository**
-  git clone https://github.com/grvnameste/Intern-Hiring-React.git
+  git clone (https://github.com/ReadNRevise/Intern-Hiring-React.git)
   cd  Intern-Hiring-React
 
 #### 2. **Backend Setup**
