@@ -96,137 +96,101 @@ The **Employee Leave Management System** is a **full-stack web application** des
 
 ### Local Development Setup
 
-#### 1. **Clone the Repository**
-  git clone (https://github.com/ReadNRevise/Intern-Hiring-React.git)
-  cd  Intern-Hiring-React
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/ReadNRevise/Intern-Hiring-React.git
+cd Intern-Hiring-React
+```
 
-#### 2. **Backend Setup**
+#### 2. Backend Setup
+1. Navigate to the server folder:
+   ```bash
+   cd server
+   ```
+2. Create your `.env` file (copying `.env.example`):
+   ```bash
+   cp .env.example .env
+   ```
+   *Make sure `DATABASE_URL` matches your local PostgreSQL instance.*
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Run migrations and generate the Prisma Client:
+   ```bash
+   npx prisma migrate dev
+   ```
+5. Seed the database with test accounts (Admin, Managers, Employees, Leave Policies):
+   ```bash
+   npx prisma db seed
+   ```
+6. Start the backend developer server:
+   ```bash
+   npm run dev
+   ```
+   *(Running on http://localhost:3001)*
 
-- Navigate to the backend directory:
+#### 3. Frontend Setup
+1. Navigate to the client folder:
+   ```bash
+   cd ../client
+   ```
+2. Create your `.env.local` file:
+   ```bash
+   cp .env.example .env.local
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the Next.js development server:
+   ```bash
+   npm run dev
+   ```
+   *(Running on http://localhost:3000)*
 
-  cd server
+---
 
-#### 3. **Frontend Setup**
+## Unit & Integration Testing
 
-- Navigate to the frontend directory:
-    cd ../client
-  
+The project contains unit and integration test suites validating both frontend utilities and full backend workflows.
 
-## Unit Testing
+### Running Backend Tests
+From the `server` directory:
+```bash
+npm run test
+```
+*Runs the API integration test suite (`tests/api.test.ts`) covering Authentication, RBAC route guarding, Leave request validations, and Approval/Rejection transitions.*
 
-**Note:** Your project **must include unit tests** for both backend and frontend to ensure reliability and correctness.
+To run the standalone concurrency test:
+```bash
+node --loader ts-node/esm tests/concurrency.test.ts
+```
+*Validates the atomic balance decrement transaction under simultaneous dual approval requests, asserting that only one request succeeds and balance never goes negative.*
 
-### Backend Testing
+### Running Frontend Tests
+From the `client` directory:
+```bash
+npm run test
+```
+*Runs the frontend utility tests including role-based dashboard path resolution.*
 
-- Use **Jest** or **Vitest** to test:
-  - API endpoints (e.g., auth, leave requests, user management)
-  - Database operations (Prisma queries)
-  - Authentication middleware
-  - Input validation and error handling
-- Example test cases:
-  - Test user registration and login
-  - Test leave request creation, approval, and rejection
-  - Test role-based access control
+---
 
-### Frontend Testing
+## Documented Design Decisions
 
-- Use **Jest** + **React Testing Library** to test:
-  - Component rendering and interactions
-  - Form submissions and validations
-  - API integration (mock API calls)
-- Example test cases:
-  - Test login form submission
-  - Test leave application form validation
-  - Test role-based UI rendering (e.g., Admin sees user management, Employee does not)
+1. **No Self-Registration Endpoint**:
+   - In accordance with the assignment specifications, users cannot register themselves. Only an authenticated **Admin** can create new employee/manager accounts via the User Management panel. This ensures strict corporate directory integrity.
+2. **Top-Level Reporting Hierarchy (`managerId: null`)**:
+   - Employees report to a specific Manager. Top-level managers and Admins have `managerId: null`, meaning they have no direct supervisor above them. This design handles the root nodes of the organizational hierarchy gracefully.
+3. **Cookie-Only Authentication**:
+   - The application does not store JWT tokens in `localStorage` or `sessionStorage` to mitigate XSS vulnerabilities. Cookies are sent with `httpOnly` flags, and the Next.js client uses `credentials: "include"` for all fetch operations.
 
-### Running Tests
-
-- Backend:
-  ```bash
-  npm run test
-  ```
-- Frontend:
-  ```bash
-  npm run test
-  ```
+---
 
 ## Deployment Instructions
 
-**Note:** Your project **must include deployment instructions** to demonstrate how to deploy the application in a production-like environment.
-
-### Option 1: Deploy to Vercel (Frontend) + Render (Backend)
-
-#### Frontend (Next.js) on Vercel
-
-1. Push your code to a GitHub repository.
-2. Go to [Vercel](https://vercel.com/) and import your repository.
-3. Configure the following environment variables in Vercel:
-  ```env
-   NEXT_PUBLIC_API_URL=<your-backend-url>
-  ```
-4. Deploy the frontend.
-
-#### Backend (Node.js) on Render
-
-1. Go to [Render](https://render.com/) and create a new **Web Service**.
-2. Connect your GitHub repository and select the `server` directory.
-3. Configure the following environment variables in Render:
-  ```env
-   DATABASE_URL=<your-postgresql-connection-string>
-   JWT_SECRET=your_jwt_secret_here
-   PORT=5000
-  ```
-4. Set the build command to:
-  ```bash
-   npm install && npx prisma generate
-  ```
-5. Set the start command to:
-  ```bash
-   npm start
-  ```
-6. Deploy the backend.
-
-### Option 2: Deploy to Railway
-
-1. Go to [Railway](https://railway.app/) and create a new project.
-2. Add a **PostgreSQL** service and note the connection string.
-3. Add a **Node.js** service for the backend and connect it to the PostgreSQL service.
-4. Set the environment variables for the backend:
-  ```env
-   DATABASE_URL=<railway-postgresql-connection-string>
-   JWT_SECRET=your_jwt_secret_here
-   PORT=5000
-  ```
-5. Deploy the backend.
-6. Add another **Node.js** service for the frontend (Next.js) and set:
-  ```env
-   NEXT_PUBLIC_API_URL=<your-backend-url>
-  ```
-7. Deploy the frontend.
-
-### General
-
-- Git best practices (meaningful commits, branches, pull requests)
-- Code readability and organization
-- Documentation (comments, README updates)
-- Ability to complete the project within 1 week
-
-##  Submission Guidelines
-
-1. **Fork the Repository**: Create a fork of the provided repository.
-2. **Create a Branch**: Work on a branch named `intern-<your-name>`.
-3. **Commit Regularly**: Make small, meaningful commits.
-4. **Push to GitHub**: Push your branch to your fork.
-5. **Submit a Pull Request**: Open a PR to the main repository with:
-  - A clear title (e.g., "Intern Submission: [Your Name]")
-  - A description of your implementation
-  - Any assumptions or challenges faced
-6. **Include a README**: Update the README with:
-  - Setup instructions
-  - Features implemented
-  - Screenshots or a short demo video (optional but encouraged)
-  - **Unit test results** (screenshots or logs)
-  - **Deployment link** (if deployed)
+Detailed deployment instructions for Vercel, Render, and PostgreSQL setup are available in [DEPLOYMENT.md](file:///c:/Users/arjun/Intern-Hiring-React/DEPLOYMENT.md).
 
 ## 💡 Tips for Interns
 
