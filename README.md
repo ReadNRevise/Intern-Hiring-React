@@ -385,16 +385,85 @@ Employee@123
 
 # Screenshots
 
-Recommended screenshots:
+## Login
 
-- Login Page
-- Employee Dashboard
-- Manager Dashboard
-- Admin Dashboard
-- Apply Leave
-- Leave Requests
-- Reports
-- Notification Panel
+![](screenshots/login.png)
+
+---
+
+## Employee Dashboard
+
+![](screenshots/employee-dashboard.png)
+
+---
+
+## Apply Leave
+
+![](screenshots/employee-apply-leave.png)
+
+---
+
+## Leave History
+
+![](screenshots/employee-history.png)
+
+---
+
+## Manager Dashboard
+
+![](screenshots/manager-dashboard.png)
+
+---
+
+## Team Leave Requests
+
+![](screenshots/manager-team-requests.png)
+
+---
+
+## Admin Dashboard
+
+![](screenshots/admin-dashboard.png)
+
+---
+
+## User Management
+
+![](screenshots/user-management.png)
+
+---
+
+## Leave Types
+
+![](screenshots/leave-types.png)
+
+---
+
+## All Leave Requests
+
+![](screenshots/all-requests.png)
+
+---
+
+## Request Details
+
+![](screenshots/request-details.png)
+
+---
+
+## Reports
+
+### Leave Summary
+
+![](screenshots/reports-summary.png)
+
+### Leave Balances
+
+![](screenshots/reports-balances.png)
+
+### Leave Calendar
+
+![](screenshots/reports-calendar.png)
 
 ---
 
